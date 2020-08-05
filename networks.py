@@ -5,7 +5,8 @@ import itertools
 from collections import OrderedDict
 import Interp
 from torchvision.models import vgg16
-
+import sys
+print (sys._getframe().f_back.f_code.co_name)
 
 class Model(nn.Module):
     def __init__(self, args):
@@ -334,7 +335,7 @@ class Conv2dBlock(nn.Module):
         elif norm == 'in':
             self.norm = nn.InstanceNorm2d(norm_dim)
         elif norm == 'gn':
-            print("###########",norm_dim,"##################")
+            #print("###########",norm_dim,"##################")
             
             self.norm = nn.GroupNorm(norm_dim/8.0, norm_dim)
         elif norm == 'none':
@@ -375,7 +376,7 @@ class Conv2dBlock(nn.Module):
            # print('\n\n\n\n\n')   
          
             x =self.norm(x)
-            print(x)
+            #print(x)
         if self.activation:
             x = self.activation(x)
         return x

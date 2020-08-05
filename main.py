@@ -28,7 +28,7 @@ def main():
     parser.add_argument('--no-color-net', dest='color_net', action='store_false', help='do not include color net in the model')
     parser.add_argument('--color-net-downsample', default=3, type=int, help='number of downsampling layers in color net')
     parser.add_argument('--no-color-net-skip', dest='color_net_skip', action='store_false', help='dont use u-net skip connections in the color net')
-    parser.add_argument('--dim', cldefault=32, type=int, help='initial feature dimension (doubled at each downsampling layer)')
+    parser.add_argument('--dim', default=32, type=int, help='initial feature dimension (doubled at each downsampling layer)')
     parser.add_argument('--n-res', default=8, type=int, help='number of residual blocks')
     parser.add_argument('--norm', default='gn', type=str, help='type of normalization layer')
     parser.add_argument('--denormalize', dest='denormalize', action='store_true', help='denormalize output image by input image mean/var')

@@ -5,7 +5,7 @@ from PIL import Image
 import os
 import os.path
 
-IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif','.JPEG']
+IMG_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.ppm', '.bmp', '.pgm', '.tif','.JPEG','.JPG']
 
 def has_file_allowed_extension(filename, extensions):
     """Checks if a file is an allowed extension.
@@ -20,7 +20,7 @@ def has_file_allowed_extension(filename, extensions):
     return any(filename_lower.endswith(ext) for ext in extensions)
 
 def pil_loader(path):
-    print('######\n\n\n\n\n{}\n\n\n\n'.format(path))
+    #print('######\n\n\n\n\n{}\n\n\n\n'.format(path))
     if path[0]=='s':
     	path=path[3:]
     if path[0]=='a':
@@ -44,19 +44,20 @@ def accimage_loader(path):
 
 def default_loader(path):
     #print()
-    if 'Water_Real' not in path:
-    	path=path[20:]
+    path=path[20:]
     #print()
     from torchvision import get_image_backend
     if get_image_backend() == 'accimage':
         return accimage_loader(path)
     else:
-        print(path)
+        #print(path)
         return pil_loader(path)
 
 
 def find_classes(dire):
     #print(dire)
+    import sys
+    print (sys._getframe().f_back.f_code.co_name)
     classes = [d for d in os.listdir(dire)]# if os.path.isdir(os.path.join(dire, d))]
     classes.sort()
     #print(classes,"########################")
@@ -74,9 +75,18 @@ def make_dataset(dir, class_to_idx, extensions):
     for target in sorted(os.listdir(dir)):
         #print("! !")
         #print(class_to_idx)
-        d = os.path.join(dir, target);#print(dir);print("########",target,class_to_idx[target]),print(d);
+        d = os.path.join(dir, target);
+        if 'eal' in d:
+        	print(dir);print("########",target,class_to_idx[target]),print(d);
+        	t=0
+        	for te in sorted(os.listdir(d)):        	
+        		path = os.path.join(d, te)
+        		print((path,t))
+        		images.append((path,t));t+=1;#class_to_idx[te]))
         #print(d);print(os.walk(d));print(sorted(os.walk(d)));
-        path=d;images.append((d,class_to_idx[target]))
+        else:
+        	print((d,class_to_idx[target]))
+        	path=d;images.append((d,class_to_idx[target]))
         #if not os.path.isdir(d):
           #  continue
            # print('a23q')
@@ -155,6 +165,7 @@ class ImageFolder(data.Dataset):
             tuple: (sample, target) where target is class_index of the target class.
         """
         path, target = self.samples[index]
+        print(path,"%%%%%%%%%%%%%%%%%%%%%%%",target)
         sample = self.loader(os.path.join(self.root,path))
         if self.transform is not None:
             sample = self.transform(sample)
